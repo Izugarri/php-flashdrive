@@ -1,3 +1,1 @@
-<?php
-echo"Hello World, PHP is working with FlashDrive!";
-?>
+<?php require_once("index.html") ?>
