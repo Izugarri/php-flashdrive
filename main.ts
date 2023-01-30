@@ -1,14 +1,7 @@
-import {
-  app,
-  get,
-  post,
-  redirect,
-  contentType,
-} from "https://denopkg.com/syumai/dinatra/mod.ts";
+import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 
-const greeting = "<h1>Hello From Deno on Fly!</h1>";
-
-app(
-  get("/", () => greeting),
-  get("/:id", ({ params }) => greeting + `</br>and hello to ${params.id}`),
-);
+serve((_req) => {
+  return new Response("Hello World!", {
+    headers: { "content-type": "text/plain" },
+  });
+});
