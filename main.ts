@@ -1,9 +1,8 @@
-import { Application } from 'https://deno.land/x/abc@v1.0.2/mod.ts'
+import { Application } from "../../mod.ts";
+import { cors } from "../../middleware/cors.ts";
 
-const app = new Application()
+const app = new Application();
+const port = 8080;
+app.static("/", "./assets", cors()).start({ port });
 
-var localPort = 80
-if (Deno.args.length > 0) {
-  localPort = parseInt(Deno.args[0])
-}
-app.static('/', '.').file('/', 'index.html').start({ port: localPort })
+console.log(`server listening on http://localhost:${port}`);
