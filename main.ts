@@ -1,13 +1,21 @@
-import { serve } from "https://deno.land/std@0.58.0/http/server.ts";
-const server = serve({ port: 8000 });
-console.log("http://localhost:8000/");
+import {Application, Router} from 'https://deno.land/x/oak@v5.3.1/mod.ts'
 
-for await (const req of server) {
-  if (req.url === '/') {
-    req.respond({ body: "Home" });
-  } else if (req.url === '/about') {
-    req.respond({ body: "About" });
-  } else {
-    req.respond({status: 404})
-  }
-}
+const app = new Application();
+
+const router = new Router();
+router
+  .get('/', (ctx) => {
+    ctx.response.body = 'Home'
+  })
+  .get('/about', (ctx) => {
+    ctx.response.body = 'About'
+  })
+
+app.use(router.routes());
+app.use(router.allowedMethods())
+
+app.addEventListener('listen', () => {
+  console.log("Server started");
+})
+
+await app.listen({port: 8000})
