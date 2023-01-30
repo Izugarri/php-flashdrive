@@ -1,21 +1,16 @@
-import {Application, Router} from 'https://deno.land/x/oak@v5.3.1/mod.ts'
+import { Application } from "https://deno.land/x/oak/mod.ts";
 
 const app = new Application();
+app.use(async (ctx) => {
+  try {
+    await ctx.send({
+      root: `${Deno.cwd()}/static`,
+      index: "index.html",
+    });
+  } catch {
+    ctx.response.status = 404;
+    ctx.response.body = "404 File not found";
+  }
+});
 
-const router = new Router();
-router
-  .get('/', (ctx) => {
-    ctx.response.body = 'Home'
-  })
-  .get('/about', (ctx) => {
-    ctx.response.body = 'About'
-  })
-
-app.use(router.routes());
-app.use(router.allowedMethods())
-
-app.addEventListener('listen', () => {
-  console.log("Server started");
-})
-
-await app.listen({port: 8000})
+await app.listen({ port: 8000 });
