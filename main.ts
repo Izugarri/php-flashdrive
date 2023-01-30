@@ -1,8 +1,11 @@
-import { Application } from "../../mod.ts";
-import { cors } from "../../middleware/cors.ts";
+import { Application } from "https://deno.land/x/abc@v1.3.3/mod.ts";
 
 const app = new Application();
-const port = 8080;
-app.static("/", "./assets", cors()).start({ port });
 
-console.log(`server listening on http://localhost:${port}`);
+console.log("http://localhost:8080/");
+
+app
+  .get("/hello", (c) => {
+    return "Hello, Abc!";
+  })
+  .start({ port: 8080 });
