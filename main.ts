@@ -1,4 +1,4 @@
-import { Application } from 'https://deno.land/x/abc@v1.0.2/mod.ts'
+import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 
 const app = new Application()
 
