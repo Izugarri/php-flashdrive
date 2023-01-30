@@ -1,9 +1,9 @@
-import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
+import { Application } from 'https://deno.land/x/abc@v1.0.2/mod.ts'
 
-async function handler(_req) {
-  const path = await Deno.realPath("./${path}");
+const app = new Application()
 
-  return new Response("./${path}"`);
+var localPort = 80
+if (Deno.args.length > 0) {
+  localPort = parseInt(Deno.args[0])
 }
-
-serve(handler);
+app.static('/', '.').file('/', 'index.html').start({ port: localPort })
