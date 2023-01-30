@@ -1,7 +1,9 @@
-import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
+import { Application } from 'https://deno.land/x/abc@v1.0.2/mod.ts'
 
-serve((_req) => {
-  return new Response("Hello Worldssxxs!", {
-    headers: { "content-type": "text/plain" },
-  });
-});
+const app = new Application()
+
+var localPort = 80
+if (Deno.args.length > 0) {
+  localPort = parseInt(Deno.args[0])
+}
+app.static('/', '.').file('/', 'index.html').start({ port: localPort })
