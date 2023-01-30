@@ -1,11 +1,14 @@
-import { Application } from "https://deno.land/x/abc@v1.3.3/mod.ts";
+import {
+  app,
+  get,
+  post,
+  redirect,
+  contentType,
+} from "https://denopkg.com/syumai/dinatra/mod.ts";
 
-const app = new Application();
+const greeting = "<h1>Hello From Deno on Fly!</h1>";
 
-console.log("http://localhost:8080/");
-
-app
-  .get("/hello", (c) => {
-    return "Hello, Abc!";
-  })
-  .start({ port: 8080 });
+app(
+  get("/", () => greeting),
+  get("/:id", ({ params }) => greeting + `</br>and hello to ${params.id}`),
+);
