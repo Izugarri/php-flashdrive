@@ -1,7 +1,13 @@
-import { serve } from "https://deno.land/std/http/mod.ts";
-const BASE_PATH = './public';
-const reqHandler = async (req: Request) => {
-  const filePath = BASE_PATH + new URL(req.url).pathname;
-  return new Response(filePath);
-};
-serve(reqHandler, { port: 8080 });
+import { serve } from "https://deno.land/std@0.58.0/http/server.ts";
+const server = serve({ port: 8000 });
+console.log("http://localhost:8000/");
+
+for await (const req of server) {
+  if (req.url === '/') {
+    req.respond({ body: "Home" });
+  } else if (req.url === '/about') {
+    req.respond({ body: "About" });
+  } else {
+    req.respond({status: 404})
+  }
+}
