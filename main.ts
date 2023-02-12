@@ -1,11 +1,13 @@
-  import { cors } from "https://deno.land/x/abc@v1.2.4/middleware/cors.ts";
-  import { Application } from "https://deno.land/x/abc@v1.2.4/mod.ts";
+  import { Application } from "https://deno.land/x/oak/mod.ts";
 
-  const APP_PORT = 8080;
+  import { APP_HOST, APP_PORT } from "./config.ts";
+  import router from "./routing.ts";
 
   const app = new Application();
 
-  app.static("/", "build", cors())
-    .start({ port: APP_PORT });
+  app.use(router.routes());
+  app.use(router.allowedMethods());
 
-  console.log(`Server listening on http://localhost:${APP_PORT}`);
+  console.log(`Listening on ${APP_PORT}...`);
+
+  await app.listen(`${APP_HOST}:${APP_PORT}`);
