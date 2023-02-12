@@ -1,16 +1,26 @@
-import { Application } from "https://deno.land/x/oak/mod.ts";
+import { serve } from "https://deno.land/std/http/mod.ts";
+import { lookup } from "https://deno.land/x/media_types/mod.ts";
 
-const app = new Application();
-app.use(async (ctx) => {
+const BASE_PATH = "./public";
+
+const reqHandler = async (req: Request) => {
+  const filePath = BASE_PATH + new URL(req.url).pathname;
+  let fileSize;
   try {
-    await ctx.send({
-      root: `${Deno.cwd()}`,
-      index: "index.html",
-    });
-  } catch {
-    ctx.response.status = 404;
-    ctx.response.body = "404 File not found";
+    fileSize = (await Deno.stat(filePath)).size;
+  } catch (e) {
+    if (e instanceof Deno.errors.NotFound) {
+      return new Response(null, { status: 404 });
+    }
+    return new Response(null, { status: 500 });
   }
-});
+  const body = (await Deno.open(filePath)).readable;
+  return new Response(body, {
+    headers: {
+      "content-length": fileSize.toString(),
+      "content-type": lookup(filePath) || "application/octet-stream",
+    },
+  });
+};
 
-await app.listen({ port: 8000 });
+serve(reqHandler, { port: 8080 });
