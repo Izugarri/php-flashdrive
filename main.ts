@@ -1,13 +1,6 @@
-import { listenAndServe } from "https://deno.land/std/http/server.ts";
- 2
- 3listenAndServe({ port: 3000 }, async (req) => {
- 4  if (req.method === "GET" && req.url === "/") {
- 5    req.respond({
- 6      status: 200,
- 7      headers: new Headers({
- 8        "content-type": "text/html",
- 9      }),
-10      body: await Deno.open("./index.html"),
-11    });
-12  }
-13});
+import { serve } from "https://deno.land/std/http/server.ts";
+const server = serve({ port: 5000 });
+for await (const server_request of server) {
+  const _file = await Deno.readFile('./index.html');
+  const decoder = new TextDecoder()
+  server_request.respond({ body: decoder.decode(_file) });
