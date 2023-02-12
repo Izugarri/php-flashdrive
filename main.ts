@@ -1,49 +1,11 @@
-import { serve } from "https://deno.land/std@0.125.0/http/server.ts";
+  import { cors } from "https://deno.land/x/abc@v1.2.4/middleware/cors.ts";
+  import { Application } from "https://deno.land/x/abc@v1.2.4/mod.ts";
 
-const PORT = 8080;
-const ToIndexPaths = ["/", "/counter", "/todo"];
-const decoder = new TextDecoder();
+  const APP_PORT = 8080;
 
-const getContentType = (pathname: string): string => {
-  const extension = pathname.substring(pathname.lastIndexOf(".") + 1);
-  switch (extension) {
-    case "html":
-      return "text/html";
-    case "js":
-      return "text/javascript";
-    case "png":
-      return "image/png";
-    case "jpg":
-    case "jpeg":
-      return "image/jpeg";
-    case "ico":
-      return "image/x-icon";
-    default:
-      return "application/octet-stream";
-  }
-};
+  const app = new Application();
 
-const handler = async (request: Request): Promise<Response> => {
-  const url = new URL(request.url);
-  const pathname = ToIndexPaths.find((p) => p === url.pathname) != null
-    ? "/index.html"
-    : url.pathname;
+  app.static("/", "build", cors())
+    .start({ port: APP_PORT });
 
-  const fileData = await Deno.readFile(`./${pathname}`).catch(() => null);
-  if (fileData != null) {
-    const contentType = getContentType(pathname);
-    const body = contentType.startsWith("text/")
-      ? decoder.decode(fileData)
-      : fileData;
-    return new Response(body, {
-      headers: {
-        "content-type": contentType,
-      },
-    });
-  }
-
-  return new Response(null, { status: 404 });
-};
-
-console.log(`Listening on http://localhost:${PORT}/`);
-await serve(handler, { port: PORT });
+  console.log(`Server listening on http://localhost:${APP_PORT}`);
