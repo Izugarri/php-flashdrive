@@ -5,7 +5,7 @@ app.use(async (ctx) => {
   try {
     await ctx.send({
       root: `${Deno.cwd()}`,
-      
+      index: "index.html",
     });
   } catch {
     ctx.response.status = 404;
