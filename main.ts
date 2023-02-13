@@ -1,8 +1,8 @@
-import { serve } from "https://deno.land/std@0.116.0/http/server.ts";
+import { Application } from "https://deno.land/x/oak/mod.ts";
 import staticFiles from "https://deno.land/x/static_files@1.1.6/mod.ts";
 
-const serveFiles = (req: Request) => staticFiles('./')({ 
-    request: req, 
-    respondWith: (r: Response) => r 
-})
-serve((req) => serveFiles(req), { addr: ':3000' });
+const app = new Application();
+
+app.use(staticFiles("./"));
+
+await app.listen({ port: 3000 });
